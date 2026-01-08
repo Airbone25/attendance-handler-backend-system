@@ -15,6 +15,28 @@ app.use(express.json())
 const authRoutes = require('./routes/auth')
 app.use('/auth',authRoutes)
 
+const classRoutes = require('./routes/class')
+app.use('/class',classRoutes)
+
+const User = require("./models/userSchema");
+const authMiddleware = require("./middleware/auth");
+const { requireTeacher } = require("./middleware/role");
+app.get(
+  "/students",
+  authMiddleware,
+  requireTeacher,
+  async (req, res) => {
+    const students = await User.find({ role: "student" }).select(
+      "_id name email"
+    );
+
+    return res.status(200).json({
+      success: true,
+      data: students,
+    });
+  }
+);
+
 app.listen(3000,()=>{
     console.log('Server is running')
 })
