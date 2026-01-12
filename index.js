@@ -37,6 +37,10 @@ app.get(
   }
 );
 
+const attendanceRoutes = require("./routes/attendance");
+app.use("/", attendanceRoutes);
+
+
 app.listen(3000,()=>{
     console.log('Server is running')
 })
